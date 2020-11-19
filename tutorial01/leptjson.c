@@ -21,10 +21,7 @@ static int lept_parse_null(lept_context* c, lept_value* v) {
         return LEPT_PARSE_INVALID_VALUE;
     c->json += 3;
     v->type = LEPT_NULL;
-    if (*c->json == '\0')
-        return LEPT_PARSE_OK;
-    else
-        return LEPT_PARSE_ROOT_NOT_SINGULAR;
+    return LEPT_PARSE_OK;
 }
 
 static int lept_parse_false(lept_context* c, lept_value* v) {
@@ -33,10 +30,7 @@ static int lept_parse_false(lept_context* c, lept_value* v) {
         return LEPT_PARSE_INVALID_VALUE;
     c->json += 4;
     v->type = LEPT_FALSE;
-    if (*c->json == '\0')
-        return LEPT_PARSE_OK;
-    else
-        return LEPT_PARSE_ROOT_NOT_SINGULAR;
+    return LEPT_PARSE_OK;
 }
 
 static int lept_parse_true(lept_context* c, lept_value* v) {
@@ -45,10 +39,7 @@ static int lept_parse_true(lept_context* c, lept_value* v) {
         return LEPT_PARSE_INVALID_VALUE;
     c->json += 3;
     v->type = LEPT_TRUE;
-    if (*c->json == '\0')
-        return LEPT_PARSE_OK;
-    else
-        return LEPT_PARSE_ROOT_NOT_SINGULAR;
+    return LEPT_PARSE_OK;
 }
 
 static int lept_parse_value(lept_context* c, lept_value* v) {
@@ -63,12 +54,18 @@ static int lept_parse_value(lept_context* c, lept_value* v) {
 
 int lept_parse(lept_value* v, const char* json) {
     lept_context c;
+    int ret;
     //assert 函数 如果其值为假 则先向stderr打印出错信息，然后调用abort终止程序
     assert(v != NULL);
     c.json = json;
     v->type = LEPT_NULL;
     lept_parse_whitespace(&c);
-    return lept_parse_value(&c, v);
+    if ((ret = lept_parse_value(&c, v)) == LEPT_PARSE_OK) {
+        lept_parse_whitespace(&c);
+        if (*c.json != '\0')
+            ret = LEPT_PARSE_ROOT_NOT_SINGULAR;
+    }
+    return ret;
 }
 
 lept_type lept_get_type(const lept_value* v) {
