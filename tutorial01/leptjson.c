@@ -34,6 +34,7 @@ static int lept_parse_value(lept_context* c, lept_value* v) {
 
 int lept_parse(lept_value* v, const char* json) {
     lept_context c;
+    //assert 函数 如果其值为假 则先向stderr打印出错信息，然后调用abort终止程序
     assert(v != NULL);
     c.json = json;
     v->type = LEPT_NULL;
