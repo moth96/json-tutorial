@@ -80,7 +80,8 @@ static int lept_parse_number(lept_context* c, lept_value* v) {
     }
     errno = 0;
     v->n = strtod(c->json, NULL);
-    if (errno == ERANGE && v->n == HUGE_VAL) return LEPT_PARSE_NUMBER_TOO_BIG;
+    if (errno == ERANGE && (v->n == HUGE_VAL || v->n == -HUGE_VAL)) 
+        return LEPT_PARSE_NUMBER_TOO_BIG;
     c->json = p;
     v->type = LEPT_NUMBER;
     return LEPT_PARSE_OK;
