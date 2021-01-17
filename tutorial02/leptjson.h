@@ -13,7 +13,7 @@ enum {
     LEPT_PARSE_EXPECT_VALUE,        //json只含有空白
     LEPT_PARSE_INVALID_VALUE,       //其他情况
     LEPT_PARSE_ROOT_NOT_SINGULAR,   //空白之后还有其他字符
-    LEPT_PARSE_NUMBER_TOO_BIG       //
+    LEPT_PARSE_NUMBER_TOO_BIG       //数字过大
 };
 
 int lept_parse(lept_value* v, const char* json);
